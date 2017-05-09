@@ -4,6 +4,7 @@ const fetch = require('node-fetch')
 const moment = require('moment')
 
 const config = {
+  xboxApiUser: spconf.readPassword('XBOXAPI_USER'),
   xboxApiKey: spconf.readPassword('XBOXAPI_KEY'),
   dbUser: spconf.readString('DB_USER'),
   dbPass: spconf.readPassword('DB_PASS')
@@ -21,8 +22,7 @@ function log() {
   const xboxApiOpts = {
     headers: {'X-AUTH': config.xboxApiKey}
   }
-  fetch('https://xboxapi.com/v2/2533274842981234/presence', xboxApiOpts)
-  //fetch('https://jsonplaceholder.typicode.com/users/1')
+  fetch(`https://xboxapi.com/v2/${config.xboxApiUser}/presence`, xboxApiOpts)
       .then(res => {
         if (res.ok) {
           return res.json()
@@ -34,7 +34,7 @@ function log() {
       })
       .then(body => {
         const now = moment.utc().format()
-        const id = '2533274842981234_' + now
+        const id = `${config.xboxApiUser}_${now}`
         body.now = now
         const opts = {
           method: 'PUT',
