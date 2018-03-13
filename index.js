@@ -6,6 +6,7 @@ const moment = require('moment')
 const config = {
   xboxApiUser: spconf.readPassword('XBOXAPI_USER'),
   xboxApiKey: spconf.readPassword('XBOXAPI_KEY'),
+  dbUrl: spconf.readString('DB_URL'),
   dbUser: spconf.readString('DB_USER'),
   dbPass: spconf.readPassword('DB_PASS')
 }
@@ -46,7 +47,7 @@ function log() {
         }
 
         // console.log('opts:', opts)
-        return fetch(`https://codeite.cloudant.com/xbox/${id}`, opts)
+        return fetch(`${config.dbUrl}${id}`, opts)
           .then(res => {
             if (res.ok) {
               console.log('Status: ', body.state, now)
